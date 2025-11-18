@@ -1,0 +1,149 @@
+#include <iostream>
+#include <string>
+using namespace std;
+// 🎬 Class representing a Movie
+class Movie {
+private:
+    string name;
+    float price;
+public:
+    Movie(string n = "", float p = 0.0) {
+        name = n;
+        price = p;
+    }
+ void displayMovie() {
+        cout << "Movie Name   : " << name << endl;
+        cout << "Ticket Price : Rs." << price << endl;
+    }string getName() { return name; }
+    float getPrice() { return price; }
+};
+// 🎟️ Class representing a Booking
+class Booking {
+private:
+    string customerName;
+    string contactNumber;
+    int tickets;
+    string seatType;
+    string showTime;
+    bool snacks;
+    Movie *movie;
+public:
+    // Constructor
+    Booking(string cname, string contact, Movie *m, int t, string sType, string sTime, bool snk) {
+        customerName = cname;
+        contactNumber = contact;
+        movie = m;
+        tickets = t;
+        seatType = sType;
+        showTime = sTime;
+        snacks = snk;
+    }
+    // Function to calculate total cost
+    float calculateTotal() {
+        float seatCharge = 0.0;
+        if (seatType == "Regular") seatCharge = 0;
+        else if (seatType == "Premium") seatCharge = 50;
+        else if (seatType == "VIP") seatCharge = 100;
+
+        float snackCharge = snacks ? 100 : 0;  // Fixed snack charge Rs.100
+        float total = (movie->getPrice() + seatCharge) * tickets + snackCharge;
+        return total;
+    }
+ // Function to display booking summary
+    void showBooking() {
+        cout << "\n----------- BOOKING DETAILS -----------" << endl;
+        cout << "Customer Name  : " << customerName << endl;
+   cout << "Contact Number : " << contactNumber << endl;
+        cout << "Movie Booked   : " << movie->getName() << endl;
+        cout << "Show Timing    : " << showTime << endl;
+        cout << "Seat Type      : " << seatType << endl;
+        cout << "Tickets Booked : " << tickets << endl;
+        cout << "Snacks Added   : " << (snacks ? "Yes" : "No") << endl;
+        cout << "Total Amount   : Rs." << calculateTotal() << endl;
+        cout << "---------------------------------------" << endl;
+    }
+// Destructor
+    ~Booking() {
+        cout << "\nThank you, " << customerName << "! Your booking has been completed successfully." << endl;
+        cout << "Memory cleared for " << customerName << "'s booking.\n";
+    }
+};
+// 🎞️ Main Function
+int main() {
+    cout << "----------------------------------" << endl;
+    cout << "     MOVIE TICKET BOOKING SYSTEM   " << endl;
+    cout << "----------------------------------" << endl;
+// Display available movies
+    cout << "\nAvailable Movies:" << endl;
+    cout << "1. KGF 3 - Rs.250" << endl;
+    cout << "2. Jawan - Rs.300" << endl;
+    cout << "3. Pushpa 2 - Rs.350" << endl;
+int movieChoice;
+    cout << "\nEnter your choice (1-3): ";
+    cin >> movieChoice;
+ Movie selectedMovie;
+    if (movieChoice == 1)
+        selectedMovie = Movie("KGF 3", 250);
+    else if (movieChoice == 2)
+        selectedMovie = Movie("Jawan", 300);
+    else if (movieChoice == 3)
+        selectedMovie = Movie("Pushpa 2", 350);
+    else {
+        cout << "Invalid choice! Defaulting to KGF 3.\n";
+        selectedMovie = Movie("KGF 3", 250);
+    }
+  cin.ignore(); // Clear input buffer
+Take user details
+    string name, contact;
+    cout << "\nEnter your name: ";
+    getline(cin, name);
+    cout << "Enter your contact number: ";
+    getline(cin, contact);
+   int tickets;
+    cout << "Enter number of tickets: ";
+    cin >> tickets;
+// Seat type selection
+    cout << "\nSelect seat type:" << endl;
+    cout << "1. Regular (No extra charge)" << endl;
+    cout << "2. Premium (+Rs.50)" << endl;
+    cout << "3. VIP (+Rs.100)" << endl;
+int seatChoice;
+    cout << "Enter your choice (1-3): ";
+    cin >> seatChoice;
+  string seatType;
+    if (seatChoice == 1) seatType = "Regular";
+    else if (seatChoice == 2) seatType = "Premium";
+    else seatType = "VIP";
+/ Show timing selection
+    cout << "\nSelect show timing:" << endl;
+    cout << "1. Morning (10:00 AM)" << endl;
+    cout << "2. Afternoon (1:30 PM)" << endl;
+    cout << "3. Evening (6:00 PM)" << endl;
+    cout << "4. Night (9:30 PM)" << endl;
+   int timeChoice;
+    cout << "Enter your choice (1-4): ";
+    cin >> timeChoice;
+   string showTime;
+    switch (timeChoice) {
+        case 1: showTime = "Morning (10:00 AM)"; break;
+        case 2: showTime = "Afternoon (1:30 PM)"; break;
+        case 3: showTime = "Evening (6:00 PM)"; break;
+        case 4: showTime = "Night (9:30 PM)"; break;
+        default: showTime = "Evening (6:00 PM)";
+    }
+// Snack option
+    char snackChoice;
+    cout << "\nDo you want to add snacks (Rs.100)? (y/n): ";
+    cin >> snackChoice;
+  bool snacks = (snackChoice == 'y' || snackChoice == 'Y');
+ // Create booking dynamically
+    Booking *b1 = new Booking(name, contact, &selectedMovie, tickets, seatType, showTime, snacks);
+  // Show booking detail
+   b1->showBooking();
+ // Delete booking (calls destructor)
+    delete b1;
+ cout << "\n----------------------------------" << endl;
+    cout << "   THANK YOU FOR USING OUR SYSTEM  " << endl;
+    cout << "----------------------------------" << endl;
+return 0;
+}    
